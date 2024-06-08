@@ -24,18 +24,20 @@ export class PlayerList {
 
 	addPlayer(connection: Connection, player: ServerPlayer) {
 		this.players.add(player);
+		this.server.getServerLevel().addEntity(player);
 
 		connection.send(new ClientboundHelloPacket());
 
 		print(`${player.getName()} logged in with entity id [todo]`);
 
 		this.broadcastSystemMessage(`${player.getDisplayName()} joined the game`);
-
-		this.server.getTelemetry().playerJoin(player.getName());
+		this.server.getTelemetry().playerJoined(player.getName());
 	}
 
 	removePlayer(player: ServerPlayer) {
 		this.players.delete(player);
+		this.server.getServerLevel().removeEntity(player);
+
 		this.server.getTelemetry().playerLeft(player.getName());
 	}
 }

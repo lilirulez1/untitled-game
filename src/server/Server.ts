@@ -5,6 +5,7 @@ import {PlayerList} from "./Networking/PlayerList";
 import {Exception} from "../shared/Internal/Exception";
 import {ServerConnectionListener} from "./Networking/ServerConnectionListener";
 import {Telemetry} from "./Telemetry";
+import {ServerLevel} from "./Level/ServerLevel";
 
 export class Server {
 	private conekt = new Conekt();
@@ -13,6 +14,8 @@ export class Server {
 	private readonly connectionListener: ServerConnectionListener;
 
 	private playerList = new PlayerList(this);
+
+	private level!: ServerLevel;
 
 	constructor(private thread: thread) {
 		this.connectionListener = new ServerConnectionListener(this);
@@ -46,6 +49,10 @@ export class Server {
 		return this.telemetry;
 	}
 
+	getServerLevel() {
+		return this.level;
+	}
+
 	close() {
 		warn("Stopping server");
 
@@ -64,6 +71,8 @@ export class Server {
 		}
 
 		this.telemetry.connect();
+
+		this.level = new ServerLevel();
 
 		return true;
 	}
@@ -90,5 +99,7 @@ export class Server {
 
 	private update(time: number, deltaTime: number) {
 		this.connectionListener.update();
+
+		this.level.update()
 	}
 }

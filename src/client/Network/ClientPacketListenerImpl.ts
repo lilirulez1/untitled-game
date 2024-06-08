@@ -3,7 +3,7 @@ import {ClientboundHelloPacket} from "../../shared/Networking/Packets/Clientboun
 import {Connection} from "../../shared/Networking/Connection";
 import {Client} from "../Client";
 import {ClientboundDisconnectPacket} from "../../shared/Networking/Packets/ClientboundDisconnectPacket";
-import {LocalPlayer} from "../LocalPlayer";
+import {LocalPlayer} from "../Level/LocalPlayer";
 import {ClientboundSystemMessagePacket} from "../../shared/Networking/Packets/ClientboundSystemMessagePacket";
 
 export class ClientPacketListenerImpl implements ClientPacketListener {
@@ -25,7 +25,7 @@ export class ClientPacketListenerImpl implements ClientPacketListener {
 	}
 
 	handleHello(packet: ClientboundHelloPacket) {
-		this.client.player = new LocalPlayer(this.connection.connectedPlayer(), this.client, this);
+		this.client.player = new LocalPlayer(this, this.client, this.connection.connectedPlayer(), Vector3.zero);
 	}
 
 	handleSystemMessage(packet: ClientboundSystemMessagePacket) {

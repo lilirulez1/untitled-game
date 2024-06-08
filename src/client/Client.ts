@@ -2,7 +2,7 @@ import {Conekt} from "../shared/Conekt";
 import {RunService} from "@rbxts/services";
 import {Connection} from "../shared/Networking/Connection";
 import {ClientPacketListenerImpl} from "./Network/ClientPacketListenerImpl";
-import {LocalPlayer} from "./LocalPlayer";
+import {LocalPlayer} from "./Level/LocalPlayer";
 import {Exception} from "../shared/Internal/Exception";
 
 export class Client {

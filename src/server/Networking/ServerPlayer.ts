@@ -1,6 +1,6 @@
 import {ServerPacketListenerImpl} from "./ServerPacketListenerImpl";
 import {ClientboundSystemMessagePacket} from "../../shared/Networking/Packets/ClientboundSystemMessagePacket";
-import {PlayerEntity} from "../../shared/Level/Entity/Player";
+import {PlayerEntity} from "../../shared/Level/Entity/PlayerEntity";
 
 export class ServerPlayer extends PlayerEntity {
 	packetListener!: ServerPacketListenerImpl;

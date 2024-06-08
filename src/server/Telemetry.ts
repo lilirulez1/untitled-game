@@ -1,49 +1,62 @@
-import {HttpService} from "@rbxts/services";
+import {HttpClient} from "../shared/Internal/Http/HttpClient";
+import {SendListener} from "../shared/Internal/Http/sendListener";
 import {Exception} from "../shared/Internal/Exception";
 
 export class Telemetry {
+	private connected = false;
+
 	private website = "http://localhost:3000";
 	private key = "!G*'MbQy+Q22v";
 	private serverId = game.JobId === "" ? "STUDIO_SERVER" : game.JobId;
 
+	private httpClient = new HttpClient(this.website + "/api");
+
+	constructor() {
+		this.httpClient.headers = {
+			"Content-Type": "application/json",
+			"x-key": this.key
+		}
+		this.httpClient.data = {
+			"serverId": this.serverId,
+		}
+	}
+
 	connect() {
-		this.sendRequest("/connect", "Failed to connect to Telemetry")
+		try {
+			this.httpClient
+				.request(`/server/${this.serverId}/connect`)
+				.post(SendListener.thenRun(() => {
+					this.connected = true;
+				}));
+		} catch (e) {
+			if (e instanceof Exception) {
+				warn("Failed to connect to telemetry\n" + e);
+			}
+
+			warn("Failed to connect to telemetry\n" + e);
+		}
 	}
 
 	disconnect() {
-		this.sendRequest("/disconnect", "Failed to disconnect from Telemetry")
+		this.httpClient
+			.request(`/server/${this.serverId}/disconnect`)
+			.post();
 	}
 
-	playerJoin(name: string) {
-		this.sendRequest("/playerJoin", "Failed to send join to Telemetry", HttpService.JSONEncode({
-			name
-		}));
+	playerJoined(name: string) {
+		this.httpClient
+			.request(`/server/${this.serverId}/player/join`)
+			.data({
+				"player": {
+					"name": name,
+				}
+			})
+			.post();
 	}
 
 	playerLeft(name: string) {
-		this.sendRequest("/playerLeave", "Failed to send leave to Telemetry", HttpService.JSONEncode({
-			name
-		}));
-	}
-
-	private sendRequest(endpoint: string, warning: string, body?: string) {
-		try {
-			const result = HttpService.RequestAsync({
-				Url: `${this.website}/api/server${endpoint}`,
-				Method: "POST",
-				Body: body,
-				Headers: {
-					"Content-Type": "application/json",
-					"x-key": this.key,
-					"x-server-id": this.serverId
-				},
-			})
-
-			if (result.StatusCode < 200 || result.StatusCode > 299) {
-				throw new Exception(`Unsuccessful response status code: ${result.StatusCode}`);
-			}
-		} catch (e) {
-			warn(`${warning}` + e);
-		}
+		this.httpClient
+			.request(`/server/${this.serverId}/player/leave`)
+			.post();
 	}
 }
