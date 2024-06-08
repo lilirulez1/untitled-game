@@ -16,9 +16,6 @@ export class Telemetry {
 			"Content-Type": "application/json",
 			"x-key": this.key
 		}
-		this.httpClient.data = {
-			"serverId": this.serverId,
-		}
 	}
 
 	connect() {

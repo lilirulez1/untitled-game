@@ -14,7 +14,7 @@ export class HttpRequest {
 	}
 
 	post(sendListener?: SendListener) {
-		const data = this._data ? {...this.httpClient.data, ...this._data} : this.httpClient.data;
+		const data = this._data ? {...this.httpClient.data ?? {}, ...this._data} : this.httpClient.data;
 
 		Fetch({
 			Url: this.httpClient.getUrl() + this.endpoint,
