@@ -35,12 +35,16 @@ export class Telemetry {
 	}
 
 	disconnect() {
+		if (!this.connected) return;
+
 		this.httpClient
 			.request(`/server/${this.serverId}/disconnect`)
 			.post();
 	}
 
 	playerJoined(name: string) {
+		if (!this.connected) return;
+
 		this.httpClient
 			.request(`/server/${this.serverId}/player/join`)
 			.data({
@@ -52,8 +56,15 @@ export class Telemetry {
 	}
 
 	playerLeft(name: string) {
+		if (!this.connected) return;
+
 		this.httpClient
 			.request(`/server/${this.serverId}/player/leave`)
+			.data({
+				"player": {
+					"name": name,
+				}
+			})
 			.post();
 	}
 }
