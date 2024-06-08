@@ -17,6 +17,7 @@ export class Telemetry {
 			"x-key": this.key
 		}
 	}
+	
 
 	connect() {
 		try {
