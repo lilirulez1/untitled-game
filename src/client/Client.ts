@@ -2,11 +2,13 @@ import {Conekt} from "../shared/Conekt";
 import {RunService} from "@rbxts/services";
 import {Connection} from "../shared/Networking/Connection";
 import {ClientPacketListenerImpl} from "./Network/ClientPacketListenerImpl";
-import {LocalPlayer} from "./Level/LocalPlayer";
+import {LocalPlayer} from "./Player/LocalPlayer";
 import {Exception} from "../shared/Internal/Exception";
+import {ClientLevel} from "./Level/ClientLevel";
 
 export class Client {
-	public player!: LocalPlayer;
+	player!: LocalPlayer;
+	private level!: ClientLevel;
 
 	private conekt = new Conekt();
 	private connection!: Connection;
@@ -44,6 +46,10 @@ export class Client {
 				this.connection.handleDisconnection();
 			}
 		}
+
+		if (this.level) {
+			this.level.updateEntities();
+		}
 	}
 
 	getPacketListener() {
@@ -55,5 +61,9 @@ export class Client {
 		if (packetListener) {
 			packetListener.close();
 		}
+	}
+
+	setLevel(level: ClientLevel) {
+		this.level = level;
 	}
 }

@@ -5,6 +5,11 @@ import {ClientboundHelloPacket} from "./Packets/ClientboundHelloPacket";
 import {ServerboundHelloPacket} from "./Packets/ServerboundHelloPacket";
 import {ClientboundDisconnectPacket} from "./Packets/ClientboundDisconnectPacket";
 import {ClientboundSystemMessagePacket} from "./Packets/ClientboundSystemMessagePacket";
+import {ClientboundAddEntityPacket} from "./Packets/ClientboundAddEntityPacket";
+import {ClientboundPlayerInfoUpdatePacket} from "./Packets/ClientboundPlayerInfoUpdatePacket";
+import {ClientboundPlayerPositionPacket} from "./Packets/ClientboundPlayerPositionPacket";
+import {ClientboundRemoveEntitiesPacket} from "./Packets/ClientboundRemoveEntitiesPacket";
+import {ClientboundPlayerInfoRemovePacket} from "./Packets/ClientboundPlayerInfoRemovePacket";
 
 interface Class<T> {
 	new(...args: any[]): T;
@@ -48,5 +53,10 @@ export class ConnectionProtocol {
 		.addPacket(ClientboundDisconnectPacket)
 		.addPacket(ClientboundHelloPacket)
 		.addPacket(ServerboundHelloPacket)
-		.addPacket(ClientboundSystemMessagePacket);
+		.addPacket(ClientboundSystemMessagePacket)
+		.addPacket(ClientboundAddEntityPacket)
+		.addPacket(ClientboundPlayerInfoUpdatePacket)
+		.addPacket(ClientboundPlayerPositionPacket)
+		.addPacket(ClientboundPlayerInfoRemovePacket)
+		.addPacket(ClientboundRemoveEntitiesPacket);
 }

@@ -9,7 +9,9 @@ import {ServerLevel} from "./Level/ServerLevel";
 
 export class Server {
 	private conekt = new Conekt();
-	private telemetry = new Telemetry();
+	private telemetry = new Telemetry(this);
+
+	private startTime!: number;
 
 	private readonly connectionListener: ServerConnectionListener;
 
@@ -53,6 +55,10 @@ export class Server {
 		return this.level;
 	}
 
+	getStartTime() {
+		return this.startTime;
+	}
+
 	close() {
 		warn("Stopping server");
 
@@ -73,6 +79,8 @@ export class Server {
 		this.telemetry.connect();
 
 		this.level = new ServerLevel();
+
+		this.startTime = os.clock();
 
 		return true;
 	}
@@ -100,6 +108,6 @@ export class Server {
 	private update(time: number, deltaTime: number) {
 		this.connectionListener.update();
 
-		this.level.update()
+		this.telemetry.update(deltaTime);
 	}
 }

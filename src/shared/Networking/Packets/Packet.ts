@@ -1,8 +1,8 @@
 import {PacketListener} from "../PacketListener";
 import {ByteBuffer} from "../ByteBuffer";
 
-export abstract class Packet<T extends PacketListener> {
-	abstract handle(listener: T): void;
+export interface Packet<T extends PacketListener> {
+	handle(listener: T): void;
 
-	abstract write(byteBuffer: ByteBuffer): void;
+	write(byteBuffer: ByteBuffer): void;
 }

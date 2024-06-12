@@ -3,13 +3,18 @@ import {UpdatablePacketListener} from "../../shared/Networking/UpdatablePacketLi
 import {Connection} from "../../shared/Networking/Connection";
 import {Server} from "../Server";
 import {ServerboundHelloPacket} from "../../shared/Networking/Packets/ServerboundHelloPacket";
-import {ServerPlayer} from "./ServerPlayer";
+import {ServerPlayer} from "../Level/ServerPlayer";
 import {Packet} from "../../shared/Networking/Packets/Packet";
 import {PacketSendListener} from "../../shared/Networking/PacketSendListener";
 import {Exception} from "../../shared/Internal/Exception";
+import {ServerPlayerConnection} from "./ServerPlayerConnection";
+import {Profile} from "../../shared/Profile";
+import {BigVector3} from "../../shared/Internal/BigVector3";
+import {ClientboundPlayerPositionPacket} from "../../shared/Networking/Packets/ClientboundPlayerPositionPacket";
 
-export class ServerPacketListenerImpl implements ServerPacketListener, UpdatablePacketListener {
+export class ServerPacketListenerImpl implements ServerPacketListener, UpdatablePacketListener, ServerPlayerConnection {
 	private player!: ServerPlayer;
+	private profile!: Profile;
 
 	constructor(private readonly server: Server, private readonly connection: Connection) {}
 
@@ -32,7 +37,9 @@ export class ServerPacketListenerImpl implements ServerPacketListener, Updatable
 	handleHello(packet: ServerboundHelloPacket) {
 		const playerList = this.server.getPlayerList();
 
-		this.player = playerList.getPlayer(this.connection.connectedPlayer());
+		this.profile = new Profile(this.connection.connectedPlayer());
+
+		this.player = playerList.getPlayer(this.connection.connectedPlayer(), this.profile);
 		this.player.packetListener = this;
 
 		playerList.addPlayer(this.connection, this.player);
@@ -48,5 +55,14 @@ export class ServerPacketListenerImpl implements ServerPacketListener, Updatable
 
 			throw new Exception("Uncaught error when sending packet\n" + e);
 		}
+	}
+
+	teleport(position: BigVector3) {
+		this.player.setPosition(position);
+		this.player.packetListener.send(new ClientboundPlayerPositionPacket(position));
+	}
+
+	getPlayer(): ServerPlayer {
+		return this.player;
 	}
 }

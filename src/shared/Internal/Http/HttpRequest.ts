@@ -13,7 +13,7 @@ export class HttpRequest {
 		return this;
 	}
 
-	post(sendListener?: SendListener) {
+	post(sendListener?: SendListener, errorListener?: SendListener) {
 		const data = this._data ? {...this.httpClient.data ?? {}, ...this._data} : this.httpClient.data;
 
 		Fetch({
@@ -21,10 +21,13 @@ export class HttpRequest {
 			Method: "POST",
 			Headers: this.httpClient.headers,
 			Body: HttpService.JSONEncode(data)
-		}, future => {
-			if (future.isSuccess()) {
-				if (sendListener) {
+		}, (future, data) => {
+			if (sendListener) {
+				if (future.isSuccess()) {
 					sendListener.onSuccess();
+				} else if (errorListener) {
+					sendListener.onFailure(<string><unknown>undefined);
+					errorListener.onFailure("An error occurred while sending the request: " + data);
 				}
 			}
 		});
