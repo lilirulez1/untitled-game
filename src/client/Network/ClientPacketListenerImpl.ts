@@ -15,6 +15,7 @@ import {ClientboundPlayerInfoUpdatePacket} from "../../shared/Networking/Packets
 import {ClientboundPlayerPositionPacket} from "../../shared/Networking/Packets/ClientboundPlayerPositionPacket";
 import {ClientboundPlayerInfoRemovePacket} from "../../shared/Networking/Packets/ClientboundPlayerInfoRemovePacket";
 import {ClientboundRemoveEntitiesPacket} from "../../shared/Networking/Packets/ClientboundRemoveEntitiesPacket";
+import {Workspace} from "@rbxts/services";
 
 export class ClientPacketListenerImpl implements ClientPacketListener {
 	private playerInfoMap = new Map<string, PlayerInfo>();
@@ -39,11 +40,13 @@ export class ClientPacketListenerImpl implements ClientPacketListener {
 
 	handleHello(packet: ClientboundHelloPacket) {
 		this.profile = new Profile(this.connection.connectedPlayer());
-		this.level = new ClientLevel();
+		this.level = new ClientLevel(this.client);
 		this.client.setLevel(this.level);
 		this.client.player = new LocalPlayer(this.client, this.level, this);
 		this.client.player.resetPosition();
+		this.client.player.setId(packet.getPlayerId());
 		this.level.addEntity(this.client.player);
+		this.client.getGameRenderer().setup(Workspace.CurrentCamera!, this.client.player);
 	}
 
 	handleAddEntity(packet: ClientboundAddEntityPacket) {
@@ -92,6 +95,7 @@ export class ClientPacketListenerImpl implements ClientPacketListener {
 
 	handleMovePlayer(packet: ClientboundPlayerPositionPacket) {
 		this.client.player.setPosition(packet.getPosition());
+		this.client.player.setRotation(packet.getRotation());
 	}
 
 	handleSystemMessage(packet: ClientboundSystemMessagePacket) {

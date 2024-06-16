@@ -5,13 +5,26 @@ import {ClientPacketListenerImpl} from "./Network/ClientPacketListenerImpl";
 import {LocalPlayer} from "./Player/LocalPlayer";
 import {Exception} from "../shared/Internal/Exception";
 import {ClientLevel} from "./Level/ClientLevel";
+import {Options} from "./Options";
+import {GameRenderer} from "./GameRenderer";
 
 export class Client {
+	static instance: Client;
+
+	readonly options = new Options();
 	player!: LocalPlayer;
-	private level!: ClientLevel;
 
 	private conekt = new Conekt();
+
 	private connection!: Connection;
+	private level!: ClientLevel;
+	private gameRenderer = new GameRenderer();
+
+	private deltaTime = 0;
+
+	constructor() {
+		Client.instance = this;
+	}
 
 	run() {
 		try {
@@ -39,6 +52,8 @@ export class Client {
 	}
 
 	update(deltaTime: number) {
+		this.deltaTime = deltaTime;
+
 		if (this.connection !== undefined) {
 			if (this.connection.isConnected()) {
 				this.connection.update();
@@ -50,10 +65,20 @@ export class Client {
 		if (this.level) {
 			this.level.updateEntities();
 		}
+
+		this.gameRenderer.update();
 	}
 
 	getPacketListener() {
 		return this.player === undefined ? undefined : this.player.packetListener;
+	}
+
+	getGameRenderer() {
+		return this.gameRenderer;
+	}
+
+	getDeltaTime() {
+		return this.deltaTime;
 	}
 
 	disconnect() {

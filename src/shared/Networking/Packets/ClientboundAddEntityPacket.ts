@@ -9,18 +9,21 @@ export class ClientboundAddEntityPacket implements Packet<ClientPacketListener> 
 	private readonly uuid: string;
 	private readonly entityType: EntityType;
 	private readonly position: BigVector3;
+	private readonly rotation: Vector3;
 
-	constructor(param1: ByteBuffer | number, entityType: EntityType, uuid: string, position: BigVector3) {
+	constructor(param1: ByteBuffer | number, entityType: EntityType, uuid: string, position: BigVector3, rotation: Vector3) {
 		if (param1 instanceof ByteBuffer) {
 			this.id = param1.readUnsignedInt();
 			this.entityType = param1.readUnsignedInt();
 			this.uuid = param1.readString();
 			this.position = new BigVector3(param1);
+			this.rotation = param1.readVector3();
 		} else {
 			this.id = param1;
 			this.entityType = entityType;
 			this.uuid = uuid;
 			this.position = position;
+			this.rotation = rotation;
 		}
 	}
 
@@ -33,6 +36,7 @@ export class ClientboundAddEntityPacket implements Packet<ClientPacketListener> 
 		byteBuffer.writeUnsignedInt(this.entityType);
 		byteBuffer.writeString(this.uuid);
 		this.position.write(byteBuffer);
+		byteBuffer.writeVector3(this.rotation);
 	}
 
 	getId() {
@@ -49,5 +53,9 @@ export class ClientboundAddEntityPacket implements Packet<ClientPacketListener> 
 
 	getPosition() {
 		return this.position;
+	}
+
+	getRotation() {
+		return this.rotation;
 	}
 }

@@ -32,13 +32,6 @@ export class InputHandler {
 		} else if (this.inputType === InputType.Gamepad) {
 			this.gamepadInput.update();
 		}
-
-		print(`Steering: ${this.steering}\n` +
-			`Accelerator: ${this.accelerator}\n` +
-			`Brake: ${this.brake}\n` +
-			`Handbrake: ${this.handbrake}\n` +
-			`Gear Up: ${this.gearUp}\n` +
-			`Gear Down: ${this.gearDown}\n`);
 	}
 
 	private updateInputType() {

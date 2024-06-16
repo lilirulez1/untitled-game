@@ -33,11 +33,11 @@ export class PlayerList {
 	}
 
 	addPlayer(connection: Connection, player: ServerPlayer) {
-		connection.send(new ClientboundHelloPacket());
+		connection.send(new ClientboundHelloPacket(player.getId()));
 
-		print(`${player.getName()} logged in with entity id ${player.getId()} at ${player.getPosition().toVector3()}`);
+		print(`${player.getName()} logged in with entity id ${player.getId()} at (${player.getPosition()}) rotation (${player.getRotation()})`);
 
-		player.packetListener.teleport(player.getPosition());
+		player.packetListener.teleport(player.getPosition(), player.getRotation());
 
 		player.packetListener.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players));
 		this.players.add(player);

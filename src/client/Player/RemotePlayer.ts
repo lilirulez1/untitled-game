@@ -5,7 +5,7 @@ import {ClientPlayer} from "./ClientPlayer";
 
 export class RemotePlayer extends ClientPlayer {
 	constructor(level: ClientLevel, profile: Profile) {
-		super(level, profile, new Color3(1, 0, 0));
+		super(level, profile);
 	}
 
 	recreateFromPacket(packet: ClientboundAddEntityPacket) {

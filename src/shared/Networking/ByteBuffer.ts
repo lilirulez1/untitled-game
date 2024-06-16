@@ -34,6 +34,18 @@ export class ByteBuffer {
 		return this;
 	}
 
+	readFloat() {
+		const result = buffer.readf32(this.buffer, this.reader);
+		this.reader += 4;
+		return result;
+	}
+
+	writeFloat(float: number) {
+		buffer.writef32(this.buffer, this.pointer, float);
+		this.pointer += 4;
+		return this;
+	}
+
 	readString() {
 		const length = this.readUnsignedInt();
 		let stringBuilder = "";
@@ -76,6 +88,18 @@ export class ByteBuffer {
 		array.forEach(value => {
 			callback(this, value);
 		})
+
+		return this;
+	}
+
+	readVector3() {
+		return new Vector3(this.readFloat(), this.readFloat(), this.readFloat());
+	}
+
+	writeVector3(vector3: Vector3) {
+		this.writeFloat(vector3.X);
+		this.writeFloat(vector3.Y);
+		this.writeFloat(vector3.Z);
 
 		return this;
 	}

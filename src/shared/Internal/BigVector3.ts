@@ -26,6 +26,20 @@ export class BigVector3 {
 		}
 	}
 
+	add(vector3: Vector3): BigVector3;
+	add(vector3: BigVector3): BigVector3;
+	add(vector3: BigVector3 | Vector3) {
+		if (vector3 instanceof BigVector3) {
+			return new BigVector3(this.x + vector3.x, this.y + vector3.y, this.z + vector3.z);
+		} else {
+			return new BigVector3(this.x + vector3.X, this.y + vector3.Y, this.z + vector3.Z);
+		}
+	}
+
+	minus(vector3: BigVector3) {
+		return new BigVector3(this.x - vector3.x, this.y - vector3.y, this.z - vector3.z);
+	}
+
 	write(byteBuffer: ByteBuffer) {
 		byteBuffer.writeDouble(this.x);
 		byteBuffer.writeDouble(this.y);
