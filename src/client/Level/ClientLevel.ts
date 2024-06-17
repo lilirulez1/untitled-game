@@ -21,18 +21,18 @@ export class ClientLevel extends Level {
 
 			if (this.client.options.debug) {
 				if (entity instanceof LocalPlayer) {
-					entity.getBoundingBox().debug(this.debugRenderer.getColor(new Color3(0, 1, 0)));
+					entity.getRigidBody().debug(this.debugRenderer.getColor(new Color3(0, 1, 0)));
 					return;
 				}
 
-				entity.getBoundingBox().debug(this.debugRenderer.getColor(new Color3(1, 0, 0)));
+				entity.getRigidBody().debug(this.debugRenderer.getColor(new Color3(1, 0, 0)));
 			}
 		});
 
 	}
 
 	addEntity(entity: Entity) {
-		print(`Added entity with UUID ${entity.getUuid()} and entity id ${entity.getId()} of type ${tostring(getmetatable(entity))} to level at (${entity.getPosition()}) rotation (${entity.getRotation()})`);
+		print(`Added entity with UUID ${entity.getUuid()} and entity id ${entity.getId()} of type ${tostring(getmetatable(entity))} to level at (${entity.getPosition()}) rotation (${entity.getOrientation()}) size (${entity.getSize()})`);
 		this.entities.set(entity.getId(), entity);
 	}
 

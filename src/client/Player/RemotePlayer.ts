@@ -10,6 +10,5 @@ export class RemotePlayer extends ClientPlayer {
 
 	recreateFromPacket(packet: ClientboundAddEntityPacket) {
 		super.recreateFromPacket(packet);
-		this.setOldPosition();
 	}
 }

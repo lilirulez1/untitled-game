@@ -3,8 +3,16 @@ import {BigVector3} from "../../Internal/BigVector3";
 import {Exception} from "../../Internal/Exception";
 
 export class OrientedBoundingBox extends BoundingBox {
-	constructor(position: BigVector3, size: Vector3, private orientation: CFrame) {
+	constructor(position: BigVector3, size: Vector3, protected orientation: CFrame) {
 		super(position, size);
+	}
+
+	setOrientation(orientation: CFrame) {
+		this.orientation = orientation;
+	}
+
+	getOrientation() {
+		return this.orientation;
 	}
 
 	intersects(boundingBox: BoundingBox): boolean {
@@ -16,6 +24,8 @@ export class OrientedBoundingBox extends BoundingBox {
 	}
 
 	debug(adornment: WireframeHandleAdornment) {
+		/*		print(`RigidBody at ${this.position} with orientation ${this.orientation} of size ${this.size}`);*/
+
 		const halfSize = this.size.mul(0.5);
 		const vertices = [
 			new Vector3(-halfSize.X, -halfSize.Y, -halfSize.Z),

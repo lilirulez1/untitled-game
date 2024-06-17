@@ -35,9 +35,9 @@ export class PlayerList {
 	addPlayer(connection: Connection, player: ServerPlayer) {
 		connection.send(new ClientboundHelloPacket(player.getId()));
 
-		print(`${player.getName()} logged in with entity id ${player.getId()} at (${player.getPosition()}) rotation (${player.getRotation()})`);
+		print(`${player.getName()} logged in with entity id ${player.getId()} at (${player.getPosition()}) rotation (${player.getOrientation()}) size (${player.getSize()})`);
 
-		player.packetListener.teleport(player.getPosition(), player.getRotation());
+		player.packetListener.teleport(player.getPosition(), player.getOrientation());
 
 		player.packetListener.send(ClientboundPlayerInfoUpdatePacket.createPlayerInitializing(this.players));
 		this.players.add(player);

@@ -64,7 +64,7 @@ export class ClientPacketListenerImpl implements ClientPacketListener {
 		if (entityType === EntityType.PLAYER) {
 			const playerInfo = this.playerInfoMap.get(packet.getUuid());
 			if (playerInfo === undefined) {
-				warn(`Attempt to add player prior to sending player info (Player id ${0})`);
+				warn(`Attempt to add player prior to sending player info (Player id ${packet.getId()})`);
 				return undefined;
 			} else {
 				return new RemotePlayer(this.level, playerInfo.getProfile());
@@ -93,9 +93,9 @@ export class ClientPacketListenerImpl implements ClientPacketListener {
 		});
 	}
 
-	handleMovePlayer(packet: ClientboundPlayerPositionPacket) {
+	handlePlayerPosition(packet: ClientboundPlayerPositionPacket) {
 		this.client.player.setPosition(packet.getPosition());
-		this.client.player.setRotation(packet.getRotation());
+		this.client.player.setOrientation(packet.getOrientation());
 	}
 
 	handleSystemMessage(packet: ClientboundSystemMessagePacket) {

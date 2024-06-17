@@ -3,11 +3,22 @@ import {EntityType} from "./EntityType";
 import {Profile} from "../../Profile";
 import {BigVector3} from "../../Internal/BigVector3";
 import {Level} from "../Level";
+import {Vehicle} from "../../Vehicles/Vehicle";
 
 export abstract class PlayerEntity extends Entity {
-	protected constructor(private readonly level: Level, position: BigVector3, profile: Profile) {
+	private vehicle!: Vehicle;
+
+	protected constructor(private readonly level: Level, profile: Profile, position: BigVector3) {
 		super(EntityType.PLAYER);
 		this.setUuid(tostring(profile.getId()));
-		this.moveTo(position);
+		this.setPosition(position);
+	}
+
+	setVehicle(vehicle: Vehicle) {
+		this.vehicle = vehicle;
+	}
+
+	getVehicle() {
+		return this.vehicle;
 	}
 }

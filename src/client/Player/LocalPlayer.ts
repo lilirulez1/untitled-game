@@ -10,28 +10,31 @@ export class LocalPlayer extends ClientPlayer {
 	readonly packetListener: ClientPacketListenerImpl;
 	input = new InputHandler();
 
-	private vehicle = new TestVehicle();
-
 	constructor(private client: Client, level: ClientLevel, packetListener: ClientPacketListenerImpl) {
 		super(level, packetListener.getProfile());
 		this.packetListener = packetListener;
+
+		// TODO
+		// Fix this shit lmao
+		this.setVehicle(new TestVehicle(this));
 	}
 
 	update() {
-		super.update();
-
 		this.input.update();
 		this.simulate();
+		
+		super.update();
 
 		this.sendPosition();
 	}
 
 	simulate() {
-		this.setPosition(this.vehicle.update(this.client.getDeltaTime()));
+		if (!this.getVehicle()) return;
+
+		this.getVehicle().update(this.client.getDeltaTime());
 	}
 
 	sendPosition() {
-		const delta = this.getPosition().minus(this.getOldPosition());
 	}
 
 	resetPosition() {

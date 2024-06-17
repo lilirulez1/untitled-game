@@ -57,10 +57,10 @@ export class ServerPacketListenerImpl implements ServerPacketListener, Updatable
 		}
 	}
 
-	teleport(position: BigVector3, rotation: Vector3) {
+	teleport(position: BigVector3, orientation: CFrame) {
 		this.player.setPosition(position);
-		this.player.setRotation(rotation);
-		this.player.packetListener.send(new ClientboundPlayerPositionPacket(position, rotation));
+		this.player.setOrientation(orientation);
+		this.player.packetListener.send(new ClientboundPlayerPositionPacket(position, orientation));
 	}
 
 	getPlayer(): ServerPlayer {

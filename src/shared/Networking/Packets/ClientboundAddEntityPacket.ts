@@ -2,28 +2,26 @@ import {Packet} from "./Packet";
 import {ClientPacketListener} from "./ClientPacketListener";
 import {ByteBuffer} from "../ByteBuffer";
 import {EntityType} from "../../Level/Entity/EntityType";
-import {BigVector3} from "../../Internal/BigVector3";
+import {Entity} from "../../Level/Entity/Entity";
+import {RigidBody} from "../../Level/Physics/RigidBody";
 
 export class ClientboundAddEntityPacket implements Packet<ClientPacketListener> {
 	private readonly id: number;
 	private readonly uuid: string;
 	private readonly entityType: EntityType;
-	private readonly position: BigVector3;
-	private readonly rotation: Vector3;
+	private readonly rigidBody: RigidBody;
 
-	constructor(param1: ByteBuffer | number, entityType: EntityType, uuid: string, position: BigVector3, rotation: Vector3) {
+	constructor(param1: ByteBuffer | Entity, rigidBody: RigidBody) {
 		if (param1 instanceof ByteBuffer) {
 			this.id = param1.readUnsignedInt();
 			this.entityType = param1.readUnsignedInt();
 			this.uuid = param1.readString();
-			this.position = new BigVector3(param1);
-			this.rotation = param1.readVector3();
+			this.rigidBody = new RigidBody(param1);
 		} else {
-			this.id = param1;
-			this.entityType = entityType;
-			this.uuid = uuid;
-			this.position = position;
-			this.rotation = rotation;
+			this.id = param1.getId();
+			this.entityType = param1.getType();
+			this.uuid = param1.getUuid();
+			this.rigidBody = rigidBody;
 		}
 	}
 
@@ -35,8 +33,7 @@ export class ClientboundAddEntityPacket implements Packet<ClientPacketListener> 
 		byteBuffer.writeUnsignedInt(this.id);
 		byteBuffer.writeUnsignedInt(this.entityType);
 		byteBuffer.writeString(this.uuid);
-		this.position.write(byteBuffer);
-		byteBuffer.writeVector3(this.rotation);
+		this.rigidBody.write(byteBuffer);
 	}
 
 	getId() {
@@ -51,11 +48,7 @@ export class ClientboundAddEntityPacket implements Packet<ClientPacketListener> 
 		return this.uuid;
 	}
 
-	getPosition() {
-		return this.position;
-	}
-
-	getRotation() {
-		return this.rotation;
+	getRigidBody() {
+		return this.rigidBody;
 	}
 }

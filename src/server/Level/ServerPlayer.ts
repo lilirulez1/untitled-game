@@ -10,12 +10,13 @@ export class ServerPlayer extends PlayerEntity {
 	private disconnected = false;
 
 	constructor(level: ServerLevel, private player: Player, profile: Profile) {
-		super(level, BigVector3.ZERO, profile);
+		super(level, profile, BigVector3.ZERO);
 		this.fudgeSpawnLocation();
+		this.setSize(Vector3.one);
 	}
 
 	fudgeSpawnLocation() {
-		this.moveTo(new BigVector3(math.random(-10, 10), 0, math.random(-10, 10)));
+		this.setPosition(new BigVector3(math.random(-10, 10), 0, math.random(-10, 10)));
 	}
 
 	getPlayer() {

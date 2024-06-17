@@ -103,4 +103,22 @@ export class ByteBuffer {
 
 		return this;
 	}
+
+	readCFrame() {
+		const components = this.readArray((byteBuffer) => {
+			return byteBuffer.readFloat();
+		});
+
+		return new CFrame(...<[number, number, number, number, number, number, number, number, number, number, number, number]>components);
+	}
+
+	writeCFrame(cFrame: CFrame) {
+		const components: number[] = cFrame.GetComponents();
+
+		this.writeArray(components, (byteBuffer, value) => {
+			byteBuffer.writeFloat(value);
+		});
+
+		return this;
+	}
 }

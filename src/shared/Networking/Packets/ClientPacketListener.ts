@@ -19,7 +19,7 @@ export interface ClientPacketListener extends PacketListener {
 
 	handlePlayerInfoRemove(packet: ClientboundPlayerInfoRemovePacket): void;
 
-	handleMovePlayer(packet: ClientboundPlayerPositionPacket): void;
+	handlePlayerPosition(packet: ClientboundPlayerPositionPacket): void;
 
 	handleSystemMessage(packet: ClientboundSystemMessagePacket): void;
 
