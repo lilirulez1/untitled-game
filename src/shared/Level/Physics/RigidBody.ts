@@ -42,6 +42,14 @@ export class RigidBody extends OrientedBoundingBox {
 		return this.worldVelocity;
 	}
 
+	addAngularVelocity(velocity: Vector3) {
+		this.angularVelocity = this.angularVelocity.add(velocity);
+	}
+
+	getAngularVelocity() {
+		return this.angularVelocity;
+	}
+
 	setMass(mass: number) {
 		this.mass = mass;
 	}
@@ -52,7 +60,9 @@ export class RigidBody extends OrientedBoundingBox {
 
 	update(deltaTime: number) {
 		this.position = this.position.add(this.worldVelocity.mul(deltaTime));
-		this.orientation = this.orientation.add(this.angularVelocity.mul(deltaTime));
+
+		const angularVelocity = this.angularVelocity.mul(deltaTime);
+		this.orientation = this.orientation.mul(CFrame.Angles(angularVelocity.X, angularVelocity.Y, angularVelocity.Z));
 	}
 
 	write(byteBuffer: ByteBuffer) {

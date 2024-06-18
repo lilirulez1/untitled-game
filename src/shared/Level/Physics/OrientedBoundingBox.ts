@@ -15,6 +15,11 @@ export class OrientedBoundingBox extends BoundingBox {
 		return this.orientation;
 	}
 
+	getRotation() {
+		const [x, y, z] = this.orientation.ToEulerAnglesXYZ();
+		return new Vector3(math.deg(x), math.deg(y), math.deg(z));
+	}
+
 	intersects(boundingBox: BoundingBox): boolean {
 		if (boundingBox instanceof OrientedBoundingBox) {
 			return this.intersectsOrientedBoundingBox(boundingBox);
