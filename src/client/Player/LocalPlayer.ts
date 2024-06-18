@@ -31,7 +31,11 @@ export class LocalPlayer extends ClientPlayer {
 	simulate() {
 		if (!this.getVehicle()) return;
 
-		this.getVehicle().update(this.client.getDeltaTime());
+		const vehicle = this.getVehicle();
+		vehicle.setThrottle(this.input.throttle);
+		vehicle.setBrake(this.input.brake);
+		vehicle.setSteering(this.input.steering);
+		vehicle.update(this.client.getDeltaTime());
 	}
 
 	sendPosition() {

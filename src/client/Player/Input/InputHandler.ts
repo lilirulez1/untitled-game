@@ -10,7 +10,7 @@ enum InputType {
 
 export class InputHandler {
 	steering = 0;
-	accelerator = 0;
+	throttle = 0;
 	brake = 0;
 
 	handbrake = false;

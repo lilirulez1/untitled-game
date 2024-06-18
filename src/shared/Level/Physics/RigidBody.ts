@@ -3,8 +3,12 @@ import {BigVector3} from "../../Internal/BigVector3";
 import {ByteBuffer} from "../../Networking/ByteBuffer";
 
 export class RigidBody extends OrientedBoundingBox {
-	private velocity = Vector3.zero;
+	private worldVelocity = Vector3.zero;
+	private localVelocity = Vector3.zero;
+	private angularVelocity = Vector3.zero;
 	private mass = 0;
+	private inertia = 0;
+	private drag = 0;
 	private centreOfGravity = Vector3.zero;
 
 	constructor(byteBuffer: ByteBuffer);
@@ -21,24 +25,49 @@ export class RigidBody extends OrientedBoundingBox {
 	}
 
 	addVelocity(velocity: Vector3) {
-		this.velocity = this.velocity.add(velocity);
+		this.localVelocity = this.localVelocity.add(velocity);
+		this.worldVelocity = this.orientation.VectorToWorldSpace(this.localVelocity);
+	}
+
+	getVelocity() {
+		return this.localVelocity;
+	}
+
+	addVelocityWorld(velocity: Vector3) {
+		this.worldVelocity = this.worldVelocity.add(velocity);
+		this.localVelocity = this.orientation.VectorToObjectSpace(this.worldVelocity);
+	}
+
+	getWorldVelocity() {
+		return this.worldVelocity;
+	}
+
+	setMass(mass: number) {
+		this.mass = mass;
+	}
+
+	getWeight() {
+		return this.mass * 9.8 * 0.5;
 	}
 
 	update(deltaTime: number) {
-		this.position = this.position.add(this.velocity.mul(deltaTime));
+		this.position = this.position.add(this.worldVelocity.mul(deltaTime));
+		this.orientation = this.orientation.add(this.angularVelocity.mul(deltaTime));
 	}
 
 	write(byteBuffer: ByteBuffer) {
 		this.position.write(byteBuffer);
 		byteBuffer.writeVector3(this.size);
 		byteBuffer.writeCFrame(this.orientation);
-		byteBuffer.writeVector3(this.velocity);
+		byteBuffer.writeVector3(this.localVelocity);
+		byteBuffer.writeVector3(this.worldVelocity);
 		byteBuffer.writeUnsignedInt(this.mass);
 		byteBuffer.writeVector3(this.centreOfGravity);
 	}
 
 	private recreate(byteBuffer: ByteBuffer) {
-		this.velocity = byteBuffer.readVector3();
+		this.localVelocity = byteBuffer.readVector3();
+		this.worldVelocity = byteBuffer.readVector3();
 		this.mass = byteBuffer.readUnsignedInt();
 		this.centreOfGravity = byteBuffer.readVector3();
 	}

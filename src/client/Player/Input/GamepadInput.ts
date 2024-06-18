@@ -6,7 +6,7 @@ export class GamepadInput extends Input {
 		const gamepadState = UserInputService.GetGamepadState(Enum.UserInputType.Gamepad1);
 
 		this.inputHandler.steering = gamepadState[16].Position.X;
-		this.inputHandler.accelerator = gamepadState[9].Position.Z;
+		this.inputHandler.throttle = gamepadState[9].Position.Z;
 		this.inputHandler.brake = gamepadState[8].Position.Z;
 
 		this.inputHandler.handbrake = gamepadState[3].Position.Z === 1;
