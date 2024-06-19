@@ -58,6 +58,10 @@ export class RigidBody extends OrientedBoundingBox {
 		return this.mass * 9.8 * 0.5;
 	}
 
+	setCentreOfGravity(centreOfGravity: Vector3) {
+		this.centreOfGravity = centreOfGravity;
+	}
+
 	update(deltaTime: number) {
 		this.position = this.position.add(this.worldVelocity.mul(deltaTime));
 

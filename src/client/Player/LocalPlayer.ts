@@ -4,7 +4,7 @@ import {ClientLevel} from "../Level/ClientLevel";
 import {BigVector3} from "../../shared/Internal/BigVector3";
 import {ClientPlayer} from "./ClientPlayer";
 import {InputHandler} from "./Input/InputHandler";
-import {TestVehicle} from "../../shared/Vehicles/TestVehicle";
+import {Hyundai_i20} from "../../shared/Vehicles/Hyundai_i20";
 
 export class LocalPlayer extends ClientPlayer {
 	readonly packetListener: ClientPacketListenerImpl;
@@ -16,13 +16,13 @@ export class LocalPlayer extends ClientPlayer {
 
 		// TODO
 		// Fix this shit lmao
-		this.setVehicle(new TestVehicle(this));
+		this.setVehicle(new Hyundai_i20(this));
 	}
 
 	update() {
 		this.input.update();
 		this.simulate();
-		
+
 		super.update();
 
 		this.sendPosition();
@@ -32,10 +32,6 @@ export class LocalPlayer extends ClientPlayer {
 		if (!this.getVehicle()) return;
 
 		const vehicle = this.getVehicle();
-		vehicle.setThrottle(this.input.throttle);
-		vehicle.setBrake(this.input.brake);
-		vehicle.setSteering(this.input.steering);
-		vehicle.update(this.client.getDeltaTime());
 	}
 
 	sendPosition() {
