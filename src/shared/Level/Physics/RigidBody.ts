@@ -54,6 +54,10 @@ export class RigidBody extends OrientedBoundingBox {
 		this.mass = mass;
 	}
 
+	getMass() {
+		return this.mass;
+	}
+
 	getWeight() {
 		return this.mass * 9.8 * 0.5;
 	}

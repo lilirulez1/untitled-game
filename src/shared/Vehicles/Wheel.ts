@@ -16,19 +16,23 @@ export class Wheel {
 	private rotationAngle = 0;
 	//
 
-	private brakeForce = 0;
-	private friction = 0;
-	private motorForce = 0;
-	private offset = Vector3.zero;
-	private radius = 0;
-	private rollingFrictionForce = 0;
-	private skidEnergy = 0;
-	private steeringAngle = 0;
-	private suspension = new Suspension(0, 0, 0, 0, 0, 0, 0);
+	 brakeForce = 0;
+	 motorForce = 0;
+	 offset = Vector3.zero;
+	 radius = 0;
+	 mass = 0;
+	 rollingFrictionForce = 0;
+	 skidEnergy = 0;
+	 steeringAngle = 0;
+	 suspension = new Suspension(0, 0, 0, 0, 0, 0, 0);
 
 	constructor(private vehicle: Vehicle) {}
 
 	update(deltaTime: number) {
 
+	}
+
+	getInertia()  {
+		return this.mass * this.radius^2 / 2;
 	}
 }
